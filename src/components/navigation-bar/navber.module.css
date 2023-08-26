@@ -1,0 +1,52 @@
+
+/* navber.module.css */
+  
+.appBar {
+  position: fixed;
+  top: 0; 
+  z-index: 1000;
+  background-color: white !important; 
+  width: 100vw; 
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+}
+
+.logo {
+  margin-right: 10px;
+  height: 3vh;
+  width: 3vh;
+}
+
+.colorOnline {
+  color: var(--primary-color);
+}
+
+.MuiBadge-colorPrimary.css-106c1u2-MuiBadge-badge {
+  background-color: #fc541b !important; /* Your desired color */
+}
+
+
+.colorShop {
+  color: #000;
+  font-style: italic;
+  font-weight: bold;
+}
+
+.iconContainer {
+  position: 'absolute';
+  display: 'flex';
+  flex-direction: 'row';
+  width: '100vw';
+  align-items: 'center';
+  justify-content: 'flex-end';
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-right: 15px;
+}
+
+.iconLinkCheckout {  
+  padding-right: 5px;
+}
+
+.iconLinkUser {
+  padding-left: 5px;
+}

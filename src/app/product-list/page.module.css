@@ -1,0 +1,40 @@
+.productListContainer {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.sortContainer { 
+  flex-direction: row; 
+  text-align: right; 
+}
+
+.sortDropdown {
+  padding: 5px;
+  font-size: 16px;
+  align-items:flex-end;
+  justify-content:flex-end;
+  background-color:var(--primary-color);
+  border-radius: 8px;
+}
+
+/* For small devices */
+@media (max-width: 600px) {
+  .productListContainer > * {
+    flex: 0 0 calc(50% - 10px); /* two items per row, with a little spacing */
+  }
+}
+
+/* For medium devices */
+@media (min-width: 601px) and (max-width: 900px) {
+  .productListContainer > * {
+    flex: 0 0 calc(33.3333% - 10px); /* three items per row, with a little spacing */
+  }
+}
+
+/* For large devices */
+@media (min-width: 901px) {
+  .productListContainer > * {
+    flex: 0 0 calc(25% - 10px); /* four items per row, with a little spacing */
+  }
+}
