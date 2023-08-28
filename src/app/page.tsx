@@ -1,9 +1,12 @@
+"use client";
 import Image from 'next/image'
 import styles from './page.module.css'
 import Ads from './ads/page';
 import ProductList from './product-list/page'; 
 
-export default function Home() {
+export default function Home() { 
+  const token = localStorage.getItem('userToken') || '';
+
   return (
     <> 
       <main className={styles.main}> 

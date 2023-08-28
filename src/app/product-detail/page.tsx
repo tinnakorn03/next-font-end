@@ -104,7 +104,9 @@ export default function ProductList(props:any) {
               <span>{formattedPrice}</span>
             </div>
             <div className={styles.description}>
-              <h4>{p?.description}</h4>
+              <div className={styles.descriptionClamp}>
+                <h4>{p?.description}</h4>
+              </div>
             </div>
             <div className={styles.qty}>
               <span className={styles.qty_title}>Quantity</span>
@@ -126,7 +128,7 @@ export default function ProductList(props:any) {
               </div>
             </div>
             <div className={styles.addCart}>
-              <CButton name={'Add to cart'} onClick={addToCart}/> 
+              <CButton name={'Add to cart'} style={{color:'#fff'}} onClick={addToCart}/> 
             </div>
           </div>
 

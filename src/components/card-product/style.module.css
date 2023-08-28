@@ -7,5 +7,14 @@
   min-height: 350px;
   margin: 20px;
   overflow: hidden;  
+  transform: scale(1);
+  transition: transform 0.3s;
 }
-  
+
+.card:hover {
+  transform: scale(1.09);
+}
+ 
+.card.unhover {
+  transform: scale(0.9);
+}

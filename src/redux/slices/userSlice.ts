@@ -1,8 +1,8 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-
-export interface IUser {
-  userId?: string | null;
-  username?: string | null;
+import { User, LogIn } from '@/common/types/Auth'
+ 
+export interface IUser extends User {
+  userId?: string | null;  
   token?: string | null;
 }
 
@@ -11,9 +11,16 @@ interface RootState {
 }
 
 const initialState: IUser = {
-  userId: '202308_000001',
-  username: 'admin',
-  token: "eyJhbGciOiJIUzI1NiJ9.eyJlbWFpbCI6InVzZXJAZXhhbXBsZS5jb20iLCJmaXJzdE5hbWUiOiJzdHJpbmciLCJpbWciOiJzdHJpbmciLCJsYXN0TmFtZSI6InN0cmluZyIsIm1vYmlsZSI6InN0cmluZyIsInBhc3N3b3JkIjoiJDJiJDEwJFhWVUVxaDdldi45ZU5KaEsvb2YyeXVHYk9oVjB2RXlBV0djYy5kcWxQNkpKaUpNMnp6YUlDIiwidXNlcklkIjoiMjAyMzA4NTg2Mzk2NTMifQ.txxwQfgEi_b8AuUsV7i_NFlfxPKftW3jkLHVd_c5908"
+  userId: '',
+  username: '',
+  role:'customer',
+  isPdpa: false,
+  firstName: '', 
+  lastName: '',
+  email: '',
+  mobile: '',
+  img: '',
+  token: null
 };
 
 export const userSlice = createSlice({
@@ -23,12 +30,26 @@ export const userSlice = createSlice({
     setUser: (state, action: PayloadAction<IUser>) => {
       state.userId = action.payload.userId;
       state.username = action.payload.username;
+      state.role = action.payload.role;
+      state.isPdpa = action.payload.isPdpa
+      state.firstName = action.payload.firstName
+      state.lastName = action.payload.lastName
+      state.email = action.payload.email
+      state.mobile = action.payload.mobile
+      state.img = action.payload.img
       state.token = action.payload.token;
     },
     resetUser: (state) => {
-      state.userId = null;
-      state.username = null;
-      state.token = null;
+      state.userId = '';
+      state.username = '';
+      state.role = 'customer',
+      state.isPdpa = false,
+      state.firstName = '', 
+      state.lastName = '',
+      state.email = '',
+      state.mobile = '',
+      state.img = '', 
+      state.token = null;  
     }, 
   },
 });

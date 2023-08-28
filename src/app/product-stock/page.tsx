@@ -38,7 +38,7 @@ export default function ModifyProduct() {
     router.push('/product-stock/edit?product_id=' + product?.product_id) 
   };
 
-  const handleDelete = useCallback( async (product_id:string) => {
+  const handleDelete = useCallback( async (product_id?:string) => {
     if (!product_id) { 
       return; 
     }
@@ -60,13 +60,14 @@ export default function ModifyProduct() {
           <CButton name={'+ Add'} style={{fontSize:18}} onClick={handleCreate}/>
         </div> 
       </div>
-
-      {/* Card view */}
-      <div className={styles.maincard}>
-        {products.map(product => (
+      {products?.length ? 
+      <>
+        {/* Card view */}
+        <div className={styles.maincard}> 
+          {products.map(product => (
             <div className={styles.card} key={product.product_id}>
                 <div className={styles.imageContainer}>
-                  <img src={product.image} alt={product.product_name} style={{borderRadius:5}} width="100%"/>
+                  <img src={product?.image || ''} alt={product.product_name} style={{borderRadius:5}} width="100%"/>
                 </div>
                 <div className={styles.cardDetails}>
                   <h2 style={{paddingBottom:'0.5rem'}}>{product.product_name}</h2>
@@ -75,15 +76,15 @@ export default function ModifyProduct() {
                   <h2 style={{paddingBottom:'0.5rem'}}>Price : { frmPrice(product.price) }</h2>
                   <div className={styles.cardActions}>
                     <IconifyIcon onClick={() => handleEdit(product)} color={'var(--font-color)'} icon="iconamoon:edit-thin" />
-                    <IconifyIcon onClick={() => handleDelete(product.product_id)} color={'red'} icon="pajamas:remove" />
+                    <IconifyIcon onClick={() => handleDelete(product?.product_id || '')} color={'red'} icon="pajamas:remove" />
                   </div>
                 </div>
-            </div>
-        ))}
+            </div> 
+          ))}
         </div>
 
-       {/* Table view */}
-       <div className={styles.tableResponsive}>
+        {/* Table view */}
+        <div className={styles.tableResponsive}> 
           <table className={styles.table}>
             <thead>
               <tr>
@@ -116,8 +117,12 @@ export default function ModifyProduct() {
                 </tr>
               ))}
             </tbody>
-          </table>
-      </div>
+          </table> 
+        </div> 
+
+      </>:
+        <div className={styles.tableloading}>Loading...</div>
+      }
     </main>
   );
 }

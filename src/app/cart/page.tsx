@@ -90,9 +90,14 @@ export default function Cart() {
             <div className={styles.title}>
               <h1>Cart</h1>
             </div>
-            {order?.orders.map((product:Product, index:number) => (
-              <CardCartProduct key={index} product={product} onUpdate={updateOrderData} onRemove={removeOrderData}/>
-            ))} 
+            {order?.orders?.length ? 
+              order?.orders.map((product:Product, index:number) => (
+                <CardCartProduct key={index} product={product} onUpdate={updateOrderData} onRemove={removeOrderData}/>
+              )) :
+              <div className={styles.boxdiv}>
+                <img src="/empty-box.png" alt="EmptyBox" className={styles.emptybox} />
+              </div>
+            } 
           </div> 
           <div className={styles.summary}>
             <div className={styles.title}>

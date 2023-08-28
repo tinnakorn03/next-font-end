@@ -13,7 +13,13 @@ type CardProductProps = {
 const CardProduct: React.FC<CardProductProps> = ({product}) => {
   const router = useRouter()
   const { product_id, image, product_name, price } = product;
+  const [unhover, setUnhover] = useState(false);
 
+  const handleMouseLeave = () => {
+    setUnhover(true);
+    setTimeout(() => setUnhover(false), 300); // 300ms is the duration of the transition
+  };
+  
   const formattedPrice = useMemo(() => {
     return frmPrice(price)
   }, [product_id]);
@@ -24,7 +30,10 @@ const CardProduct: React.FC<CardProductProps> = ({product}) => {
   }
 
   return (
-    <Card onClick={onProductClick} className={styles.card}>
+    <Card onClick={onProductClick} 
+      className={`${styles.card} ${unhover ? styles.unhover : ''}`}
+      onMouseLeave={handleMouseLeave} 
+    >
       <CardMedia
         component="img"
         alt={product_name}

@@ -1,19 +1,10 @@
 "use client";
 import { useState, useEffect, useMemo} from 'react'; 
 import styles from './style.module.css'; 
-import { useDispatch, useSelector } from 'react-redux';
 import { frmPrice } from '@/common/formatted/Price';
-import { getUser, setUser ,IUser} from '@/redux/slices/userSlice'; 
-import { addProductToCart } from '@/redux/slices/orderSlice'; 
 import CButton from '@components/button/Button' 
-import { Card, CardContent, CardMedia, Typography } from '@mui/material';
-import Link from 'next/link';
 import IconifyIcon from '@components/icon';
-import { Product, ImageDetail } from '@/common/types/Product'
-import { useRouter } from 'next/navigation'
-
-import { getProductById } from '@/api/product.service';  
-import { Response } from '@/common/types/Response' 
+import { Product } from '@/common/types/Product'
  
  
 type ProductFormProps = {
@@ -21,58 +12,74 @@ type ProductFormProps = {
     onSubmit: (values: Product) => void;
     actionType: 'create' | 'edit';
 };
-
-const fileToImageDetail = (file: File): ImageDetail => ({
-    name: file.name,
-    lastModified: file.lastModified,
-    lastModifiedDate: new Date(file.lastModified).toISOString(),
-    webkitRelativePath: (file as any).webkitRelativePath || '',
-    size: file.size,
-    type: file.type
-});
-
+ 
 
 const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmit, actionType }) => {
-    const [formValues, setFormValues] = useState<Product>(initialValues); 
-    const [previewURL, setPreviewURL] = useState<string | null>(null);
-
+    const [formValues, setFormValues] = useState<Product>(initialValues as Product); 
+ 
     const title = {
         'create': 'Add Item',
         'edit':'Edit Item'
     }[actionType]
-    
-    // const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+     
+    // const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     //     if (event.target.files && event.target.files.length > 0) {
     //         const file = event.target.files[0]; 
+    //         const reader = new FileReader(); 
+    //         reader.onloadend = () => {
+    //             const base64String = reader.result as string;  // Assert the result as a string
+    //             setFormValues(prevValues => ({
+    //                 ...prevValues,
+    //                 image: base64String,
+    //             }));
+    //         };
     
-    //         const imageDetail = fileToImageDetail(file);
-    
-    //         setPreviewURL(URL.createObjectURL(file));
-    
-    //         setFormValues(prevValues => ({
-    //             ...prevValues,
-    //             image: imageDetail,
-    //         }));
+    //         reader.readAsDataURL(file);
     //     }
     // };
     const handleFileChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
-            const file = event.target.files[0]; 
-            const reader = new FileReader(); 
-            reader.onloadend = () => {
-                const base64String = reader.result as string;  // Assert the result as a string
+            const file = event.target.files[0];
+            
+            const image = new Image();
+            image.src = URL.createObjectURL(file);
+            image.onload = () => {
+                // Set up a canvas with the desired dimensions
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                // Determine the new dimensions while maintaining the aspect ratio
+                let { width, height } = image;
+                if (width > height) {
+                    if (width > 600) {
+                        height *= 600 / width;
+                        width = 600;
+                    }
+                } else {
+                    if (height > 600) {
+                        width *= 600 / height;
+                        height = 600;
+                    }
+                }
+    
+                canvas.width = width;
+                canvas.height = height;
+                
+                // Draw the image on the canvas
+                ctx?.drawImage(image, 0, 0, width, height);
+    
+                // Get the data URL from the canvas
+                const resizedDataURL = canvas.toDataURL(file.type);
+    
                 setFormValues(prevValues => ({
                     ...prevValues,
-                    image: base64String,
+                    image: resizedDataURL,
                 }));
             };
-    
-            reader.readAsDataURL(file);
         }
     };
     
       
-
     const handleSubmit = (event: React.FormEvent) => {
         event.preventDefault(); 
         onSubmit(formValues);
@@ -129,7 +136,6 @@ const ProductForm: React.FC<ProductFormProps> = ({ initialValues, onSubmit, acti
                     />
                     <div className={styles.previewImg}>
                         {(typeof formValues.image === 'string' && formValues.image != '') ? <img src={formValues.image} alt={`Product_${formValues?.product_id}`} /> : null}
-                        {/* {previewURL ? <img src={previewURL} alt={`Product_${formValues?.product_id}`} /> : null} */}
                     </div>
                 </div>
             </article>

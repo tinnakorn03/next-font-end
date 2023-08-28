@@ -49,22 +49,26 @@ export default function ProductList() {
       <div className={styles.sortContainer}>
         {!products?.length ? null : 
         <select 
+          style={{padding:'0.5rem'}}
           value={sortOrder || ''}
           onChange={(e) => setSortOrder(e.target.value as 'HIGH_TO_LOW' | 'LOW_TO_HIGH')}
-          className={styles.sortDropdown}
+          className={styles.sortDropdown} 
         >
-          <option value="">Sort by Price</option>
+          <option value=""><span>Sort by Price</span></option>
           <option value="HIGH_TO_LOW">High to Low</option>
           <option value="LOW_TO_HIGH">Low to High</option>
         </select>}
       </div>
       <div className={styles.productListContainer}>
-        {products.map((product:Product, index:number) => (
-          <CardProduct
-            key={index}
-            product={product}
-          />
-        ))}
+        {products?.length ? 
+          products.map((product:Product, index:number) => (
+            <CardProduct
+              key={index}
+              product={product}
+            />
+          )) :
+          <div>Loading...</div>
+        }
       </div>
     </>
   );

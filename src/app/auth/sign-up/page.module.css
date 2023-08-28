@@ -1,9 +1,24 @@
 .main {
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
-  align-items: center;
-  padding: 6rem;
-  min-height: 100vh;
+  justify-content: center;
+  align-items: center; 
+  padding-top: 6rem;
+  /* padding-right: 3rem; */
+  min-height: 100vh;  
+  background-color: rgba(var(--callout-rgb), 0.5);
 }
  
+/* Media query for larger screens */
+@media (min-width: 768px) {
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center; 
+    padding-left: 3rem;
+    padding-right: 3rem;
+    min-height: 100vh;  
+    background-color: rgba(var(--callout-rgb), 0.5);
+  }
+}

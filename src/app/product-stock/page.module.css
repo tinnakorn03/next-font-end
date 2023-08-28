@@ -81,16 +81,27 @@
   -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  max-height: calc(1.5em * 3); /* 1.5em is the estimated line-height, adjust if necessary */
+  max-height: calc(1.5em * 3);
 }
+
 .descriptionTdClamp{
   margin-bottom:1rem;
   display: -webkit-box;
   -webkit-line-clamp: 6;
   -webkit-box-orient: vertical;
   overflow: hidden;
-  max-height: calc(1.5em * 6); /* 1.5em is the estimated line-height, adjust if necessary */
+  max-height: calc(1.5em * 6); 
 }
+
+.tableloading{
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+  align-items: center;
+  justify-content: center; 
+  margin-top: -6rem;
+}
+
 @media screen and (max-width: 768px) {
   .main {
     display: flex;

@@ -1,18 +1,17 @@
 "use client";
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link'; 
 import IconifyIcon from '@components/icon';
 import styles from './navber.module.css' 
 import { useDispatch, useSelector } from 'react-redux';  
 import { getOrder, IPropsOrder } from '@/redux/slices/orderSlice'; 
-import { getUser, IUser} from '@/redux/slices/userSlice';
-
+import { getUser, IUser} from '@/redux/slices/userSlice'; 
 import { Menu, MenuItem } from '@mui/material';
 
 import {  AppBar, Toolbar, Typography, Badge, IconButton, Modal, Box, Card, Container} from '@mui/material'; 
  
 
-const NavBar: React.FC = () => {
+const NavBar: React.FC = () => { 
   const [orderCount, setOrderCount] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [scale, setScale] = useState<number>(1);
@@ -50,8 +49,7 @@ const NavBar: React.FC = () => {
     window.addEventListener('resize', handleResize);
     return () => window.removeEventListener('resize', handleResize);
   }, []);
-
-
+ 
   const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
     setAnchorEl(event.currentTarget);
   };
@@ -65,6 +63,21 @@ const NavBar: React.FC = () => {
     // handleMenuClose();
   };
 
+  const LinkCart = useMemo(()=>{
+    return orderCount > 0 ?
+          <Link href={'/cart'}>
+            <span className={styles.iconLinkCheckout}>
+              <Badge badgeContent={orderCount} color="warning">  
+                <IconifyIcon color={ orderCount>0 ? "var(--primary-color)" : 'var(--nav-icon)'} icon="streamline:shopping-cart-3-shopping-cart-checkout" />
+              </Badge>
+            </span>
+          </Link>:
+           <span className={styles.iconLinkCheckout}>
+            <Badge badgeContent={orderCount} color="warning">  
+              <IconifyIcon color={ orderCount>0 ? "var(--primary-color)" : 'var(--nav-icon)'} icon="streamline:shopping-cart-3-shopping-cart-checkout" />
+            </Badge>
+          </span>
+  },[orderCount])
   return (
     <>
       <AppBar position="static" className={styles.appBar}>
@@ -75,19 +88,13 @@ const NavBar: React.FC = () => {
             justifyContent={isMobile ? "flex-start" : "center"}
             style={{ transform: `scale(${scale})`, transformOrigin: 'left' }}
           >          
-           <Link href={'/'}>
-              <img src="/Logo.png" alt="Logo" className={styles.logo} />
-           </Link>
+          <Link href={'/'}>
+            <img src="/Logo.png" alt="Logo" className={styles.logo} />
+          </Link>
            
           </Box>
           <div className={styles.iconContainer} style={{ transform: `scale(${scale})`, transformOrigin: 'left' }}>
-            <Link href={'/cart'}>
-              <span className={styles.iconLinkCheckout}>
-                <Badge badgeContent={orderCount} color="warning">  
-                  <IconifyIcon color={ orderCount>0 ? "var(--primary-color)" : 'var(--nav-icon)'} icon="streamline:shopping-cart-3-shopping-cart-checkout" />
-                </Badge>
-              </span>
-            </Link>
+            {LinkCart}
             <span className={styles.iconLinkUser} onClick={handleMenuOpen}>
               <Badge>
                 <IconifyIcon color={userActive ? "var(--primary-color)" : "var(--nav-icon)"} icon="ep:user"/>

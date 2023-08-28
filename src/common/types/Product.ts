@@ -4,20 +4,11 @@ export interface Product {
     description: string;
     quantity: number;
     price: number;
-    image?: string | ImageDetail; 
+    image?: string; 
 };
 
 export interface Product {
     addItem?: number;
     isDelete?:boolean; 
 }
- 
-export interface ImageDetail {
-    name: string;
-    lastModified: number;
-    lastModifiedDate: string;
-    webkitRelativePath: string;
-    size: number;
-    type: string;
-}
- 
+  
