@@ -1,7 +1,9 @@
 :root {
   --primary-color: #fc541b;
-  --font-color: rgb(20, 20, 20);
-
+  --font-color: rgb(0, 0, 0);
+  --table-thead-color: rgb(255, 255, 255); 
+  --table-thead-font-color: rgb(0, 0, 0);
+  --nav-icon: rgb(0, 0, 0);
   --max-width: 1100px;
   --border-radius: 12px;
   --font-mono: ui-monospace, Menlo, Monaco, 'Cascadia Mono', 'Segoe UI Mono',
@@ -48,6 +50,10 @@
   :root {
     --primary-color: #fc541b; 
     --font-color: rgb(255, 255, 255);
+
+    --table-thead-color:  rgb(0, 0, 0);
+    --table-thead-font-color: rgb(255, 255, 255);
+    --nav-icon: rgb(182, 178, 178);
     --foreground-rgb: 255, 255, 255;
     --background-start-rgb: 0, 0, 0;
     --background-end-rgb: 0, 0, 0;
@@ -93,8 +99,9 @@
   font-display: swap;
 }
 
-h1, h2, h3, h4, h5, h6, span, input, select, option, button, .text {
+h1, h2, h3, h4, h5, h6, span, input, select, option, label, p, button, .text, .table tr th, .table tr td{
   font-family: 'NotoSansThai', sans-serif;
+  color: rgb(var(--font-color));
 }
  
 html,

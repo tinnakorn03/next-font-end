@@ -2,12 +2,10 @@
   display: flex;
   flex-direction: column;
   justify-content: space-between; 
-  padding-top: 6rem;
-  padding-bottom: 6rem;
+  padding-top: 6rem; 
   padding-left: 3rem;
-  padding-right: 3rem; 
-  min-height: 100vh; 
-  background-color:  rgba(var(--callout-rgb), 0.5);
+  padding-right: 3rem;
+  min-height: 100vh;  
 } 
 
 .breadcrumb {  
@@ -21,10 +19,17 @@
   height: 100vh;   
 }
 
-.cardImg {    
+.itemList {    
   overflow: hidden; 
-  max-width: 100vw;
+  min-width: 60vw;
   align-items: flex-start;
+  padding-bottom: 2rem;  
+}
+
+.summary {     
+  flex-direction: column;
+  overflow: hidden; 
+  min-width: 30vw; 
 }
 
 .image {
@@ -32,27 +37,33 @@
   width: 100%;
   border-radius: 5px;
 }
-
-
-.cardContent {     
-  flex-direction: column;
-  overflow: hidden; 
-  padding-top: 2rem; 
-}
-
+ 
 .title { 
   color: rgba(var(--font-color), 0.5);
   padding-bottom: 1rem;
 } 
-.price {
-  font-size: 32px;  
+
+.detail {
+  display: flex;
+  flex-direction: column;
+  background-color: rgba(var(--font-color), 0.5); 
+  padding-bottom: 2rem; 
+}
+
+.detail_item {
+  display: flex;
+  justify-content: space-between; /* Push children to the far left and right */
+  margin-bottom: 8px; /* Space between items */
+}
+
+.total {
+  display: flex;
+  justify-content: space-between;
+  font-weight: bold;  
   color: rgba(var(--font-color), 0.5); 
   padding-bottom: 2rem;
-} 
-.description { 
-  color: rgba(var(--font-color), 0.5);
-  padding-bottom: 2rem;
 }
+ 
 .qty {
   flex-direction: column;  
   padding-bottom: 3rem;
@@ -99,12 +110,12 @@
   margin-left: 1rem;
 }
 
-.addCart {
+.checkout {
   width: 100%;  
   height: 4rem; 
 }
 
-.btnAddCart {
+.btnCheckout {
   width: 100%;  
   height:100%;  
   font-size: 28px;
@@ -121,11 +132,32 @@
 
 /* Media query for tablets and desktops */
 @media (min-width: 768px) {
+  
+  .main {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between; 
+    padding-top: 6rem; 
+    padding-bottom: 6rem; 
+    padding-left: 5rem;
+    padding-right: 5rem;
+    min-height: 100vh;  
+  } 
   .container {
-      flex-direction: row;
-      justify-content: space-between;
-      /* width: 100%; */
+    flex-direction: row;
+    justify-content: space-between; 
   }
+  .itemList {    
+    overflow: hidden; 
+    min-width: 60vw; 
+    padding-top: 0px; 
+    align-items: flex-start;
+  }
+  .summary {       
+    /* background-color :aqua; */
+    min-width: 30vw; 
+  }
+  
   .cardImg {   
       height: 50vw; 
       width: 50vw; 
@@ -138,13 +170,6 @@
       padding-left: 2rem;
       padding-right: 2rem;
   }
-  .main {
-      display: flex;
-      flex-direction: column;
-      justify-content: space-between; 
-      padding : 6rem; 
-      background-color:  rgba(var(--callout-rgb), 0.5);
-  } 
   .qty_body {
       display: flex;
       flex-direction: row;

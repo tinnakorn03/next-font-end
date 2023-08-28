@@ -2,9 +2,10 @@ import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import { Product } from '@/common/types/Product'
 
 export interface IPropsOrder {
-  userId?: string;
+  userId?: string | null;
   total_qty?: number | null; 
   total_price?: number | null;
+  deliverry_price?: number | null;
   orders: Product[];
 }
 
@@ -13,9 +14,10 @@ interface RootState {
 }
 
 const initialState: IPropsOrder = {
-  userId: "1",
+  userId: '202308_000001',
   total_qty: 0,
   total_price: 0,
+  deliverry_price: 200,
   orders: [],
 };
 
@@ -24,7 +26,7 @@ export const orderSlice = createSlice({
   initialState,
   reducers: {
     addProductToCart: (state, action: PayloadAction<Product>) => {
-      if((action.payload.addItem || 0) > 0){
+      if((action.payload.quantity || 0) > 0){
         const product = state.orders.find(
           p => p.product_id === action.payload.product_id
         );
@@ -35,10 +37,13 @@ export const orderSlice = createSlice({
           Object.assign(product, action.payload);
         }
       
-        const addedQty = action.payload.addItem || 0;
+        const addedQty = action.payload.quantity || 0;
         state.total_qty = (state.total_qty ?? 0) + addedQty;
         state.total_price = (state.total_price ?? 0) + action.payload.price * addedQty;
       } 
+    },  
+    updateOrderToCart: (state, action: PayloadAction<IPropsOrder>) => { 
+      Object.assign(state, action.payload);
     },  
     resetCart: (state) => {
       state.orders = [];
@@ -52,6 +57,6 @@ export const orderSlice = createSlice({
 export const getOrder = (state: RootState) => state.order;
 
 // Reducers and actions
-export const { addProductToCart, resetCart } = orderSlice.actions;
+export const { addProductToCart,updateOrderToCart, resetCart } = orderSlice.actions;
 
 export default orderSlice.reducer;

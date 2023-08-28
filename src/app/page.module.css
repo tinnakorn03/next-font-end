@@ -3,8 +3,10 @@
   flex-direction: column;
   justify-content: space-between;
   align-items: center;
-  padding: 6rem;
-  min-height: 100vh; 
+  padding-top: 6rem;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  min-height: 100vh;  
   background-color: rgba(var(--callout-rgb), 0.5);
 }
 
@@ -14,6 +16,9 @@
   background-color: rgba(var(--callout-rgb), 0.5);
 }
 
+.ads{
+  height: 100px;
+}
 
 .description {
   display: inherit;

@@ -7,10 +7,10 @@ export default function Home() {
   return (
     <> 
       <main className={styles.main}> 
-        <article style={{height:'40vh', paddingLeft:20,paddingRight:20}}>
-          <Ads />
+        <article style={{flex:1, marginBottom: '2rem',height:300}}>
+          <Ads heightAds={'25vw'}/>
         </article>
-        <center style={{height:'10vh'}}>
+        <center style={{marginBottom: '2rem'}}>
           <h1>NEW ARRIVALS</h1> 
         </center>
         <article>

@@ -5,15 +5,16 @@
   position: fixed;
   top: 0; 
   z-index: 1000;
-  background-color: white !important; 
-  width: 100vw; 
+  /* background-color: white !important; */
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+  background-color: rgba(var(--callout-rgb), 1) !important;
+  border-bottom: 1px solid rgba(var(--callout-border-rgb), 0.5) !important;
 }
 
 .logo {
-  margin-right: 10px;
-  height: 3vh;
-  width: 3vh;
+  /* margin-right: 10px; */
+  /* height: 3vh; */
+  width: 22vw;
 }
 
 .colorOnline {
@@ -49,4 +50,10 @@
 
 .iconLinkUser {
   padding-left: 5px;
+}
+
+@media (min-width: 768px) { 
+  .logo { 
+    width: 8vw;
+  }
 }

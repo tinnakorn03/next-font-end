@@ -4,82 +4,118 @@ import styles from './page.module.css';
 import { useDispatch, useSelector } from 'react-redux';
 import { frmPrice } from '@/common/formatted/Price';
 import { getUser, setUser ,IUser} from '@/redux/slices/userSlice'; 
-import { getOrder,IPropsOrder} from '@/redux/slices/orderSlice'; 
+import { getOrder, updateOrderToCart,resetCart, IPropsOrder} from '@/redux/slices/orderSlice'; 
 import Link from 'next/link';
+import { useRouter } from 'next/navigation' 
 import IconifyIcon from '@components/icon';
 import { Product } from '@/common/types/Product'
- 
+import CardCartProduct from '@components/card-cart-product/CardCartProduct';
+import CButton from '@components/button/Button'
+import { Response } from '@/common/types/Response' 
+
+// API 
+import { createOrder } from '@/api/order.service';  
+
  
 export default function Cart() {  
+  const router = useRouter() 
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState<number>(1);
   const user:IUser = useSelector(getUser); 
   const order:IPropsOrder = useSelector(getOrder); 
-
-  const [data, setOrder] = useState<IPropsOrder>(); 
-  
-  // const formattedPrice = useMemo(() => {
-  //   return frmPrice(p?.price || 0)
-  // }, [p?.product_id]);
-
-  
-  useEffect(() => {
-    (async ()=>{  
-      setOrder(order)  
-    })()
-  }, [order]);
  
-  
+  const updateOrderData = (updatedProduct: Product): void => {
+     
+      const updatedOrders = order.orders.map(product => 
+          product.product_id === updatedProduct.product_id ? updatedProduct : product
+      );
 
+      // Calculate total_qty and total_price
+      const total_qty = updatedOrders.reduce((sum, product) => sum + (product.quantity || 0), 0);
+      const total_price = updatedOrders.reduce((sum, product) => sum + (product.quantity || 0) * (product.price || 0), 0);
+      const upData ={
+        ...order,
+        orders: updatedOrders,
+        total_qty,
+        total_price
+      } 
+      dispatch(updateOrderToCart(upData)); 
+  };
+
+  const removeOrderData = (removedProductId: string): void => {
+    // Filter out the product that needs to be removed
+    const updatedOrders = order.orders.filter(product => product.product_id !== removedProductId);
+  
+    // Calculate total_qty and total_price
+    const total_qty = updatedOrders.reduce((sum, product) => sum + (product.quantity || 0), 0);
+    const total_price = updatedOrders.reduce((sum, product) => sum + (product.quantity || 0) * (product.price || 0), 0);
+  
+    const updatedData = {
+      ...order,
+      orders: updatedOrders,
+      total_qty,
+      total_price
+    };
+    
+    dispatch(updateOrderToCart(updatedData));
+  };
+    
+  const checkOut = async () => {
+    if (order) {  
+      const sendOrder:IPropsOrder = {
+        ...order,
+        userId:  user?.userId
+      };  
+
+      if(sendOrder?.orders?.length){ 
+        const result:Response = await createOrder(sendOrder);  
+        if(result.status === 200){
+          const {message, transactionNo}:{message:string, transactionNo:string} = result?.data;
+          localStorage.setItem('transactionNo', JSON.stringify(transactionNo));
+          dispatch(resetCart())
+          router.push('/check-out-success') 
+        }else{
+          const {message}:{message:string} = result?.data;
+          alert('API error is '+message)
+        } 
+      }
+    }
+  };
+ 
   return (
     <>
-      <main className={styles.main}> 
-        <article className={styles.breadcrumb}> 
-          <span><Link href="/" className={styles.Home}> Home </Link> {'>'} {p?.product_name}</span> 
-        </article> 
+      <main className={styles.main}>  
         <article className={styles.container}>
-          <div className={styles.cardImg}>
-            <img 
-              className={styles.image} 
-              src={p?.image} 
-              alt={p?.product_name} 
-              title={p?.product_name}
-            />
-          </div> 
-          <div className={styles.cardContent}>
+          <div className={styles.itemList}>
             <div className={styles.title}>
-              <h1>{p?.product_name}</h1>
+              <h1>Cart</h1>
             </div>
-            <div className={styles.price}>
-              <span>{formattedPrice}</span>
+            {order?.orders.map((product:Product, index:number) => (
+              <CardCartProduct key={index} product={product} onUpdate={updateOrderData} onRemove={removeOrderData}/>
+            ))} 
+          </div> 
+          <div className={styles.summary}>
+            <div className={styles.title}>
+              <h1>Summary</h1>
             </div>
-            <div className={styles.description}>
-              <h4>{p?.description}</h4>
-            </div>
-            <div className={styles.qty}>
-              <span className={styles.qty_title}>Quantity</span>
-              <div className={styles.qty_body}>
-                <button className={styles.minus} onClick={handleDecrement}>
-                  <IconifyIcon color="#fff" icon="heroicons:minus-20-solid"/> 
-                </button>
-                <input  
-                  className={styles.count}
-                  // type="number" 
-                  value={quantity} 
-                  onChange={handleInputChange} 
-                  min="0" 
-                  max="999"
-                />
-                <button className={styles.plus } onClick={handleIncrement}>
-                  <IconifyIcon color="#fff" icon="icon-park:plus"/> 
-                </button>
+            <div className={styles.detail}>
+              <div className={styles.detail_item}>
+                <h4>Subtotal</h4>
+                <h4>{frmPrice((order?.total_price || 0),true)}</h4>
+              </div>
+              <div className={styles.detail_item}>
+                <h4>Estimated Deliverry</h4>
+                <h4>{frmPrice((order?.deliverry_price|| 0),true)}</h4>
               </div>
             </div>
-            <div className={styles.addCart}>
-              <button  className={styles.btnAddCart} onClick={addToCart}>Add to cart</button>
+            <div className={styles.total}>
+                <h2>Total</h2>
+                <h2>{frmPrice(((order?.total_price || 0) + (200|| 0)),true)}</h2>
             </div>
-          </div>
-
+            <div className={styles.checkout}>
+              <CButton name={'Checkout'} onClick={checkOut}/>
+            </div>
+          </div> 
         </article>
       </main>
     </>

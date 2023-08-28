@@ -16,6 +16,8 @@
   justify-content:flex-end;
   background-color:var(--primary-color);
   border-radius: 8px;
+  border: none;
+  margin-bottom: 1rem;
 }
 
 /* For small devices */

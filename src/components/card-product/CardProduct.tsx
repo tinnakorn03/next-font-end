@@ -12,7 +12,7 @@ type CardProductProps = {
 
 const CardProduct: React.FC<CardProductProps> = ({product}) => {
   const router = useRouter()
-const { product_id, image, product_name, price } = product;
+  const { product_id, image, product_name, price } = product;
 
   const formattedPrice = useMemo(() => {
     return frmPrice(price)

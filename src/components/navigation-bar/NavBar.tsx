@@ -5,6 +5,9 @@ import IconifyIcon from '@components/icon';
 import styles from './navber.module.css' 
 import { useDispatch, useSelector } from 'react-redux';  
 import { getOrder, IPropsOrder } from '@/redux/slices/orderSlice'; 
+import { getUser, IUser} from '@/redux/slices/userSlice';
+
+import { Menu, MenuItem } from '@mui/material';
 
 import {  AppBar, Toolbar, Typography, Badge, IconButton, Modal, Box, Card, Container} from '@mui/material'; 
  
@@ -13,7 +16,18 @@ const NavBar: React.FC = () => {
   const [orderCount, setOrderCount] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [scale, setScale] = useState<number>(1);
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const [userActive, setUserActive] = useState<boolean>(true);
   const order:IPropsOrder = useSelector(getOrder); 
+  const user:IUser = useSelector(getUser); 
+
+  useEffect(() => { 
+    if (user && user.token) {
+      !userActive && setUserActive(true)
+    }else{
+      userActive && setUserActive(false)
+    }
+  }, [user]);
   
   useEffect(() => {
     setOrderCount(order?.total_qty ?? 0); 
@@ -38,6 +52,19 @@ const NavBar: React.FC = () => {
   }, []);
 
 
+  const handleMenuOpen = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleLogout = () => { 
+    localStorage.removeItem('userToken'); 
+    // handleMenuClose();
+  };
+
   return (
     <>
       <AppBar position="static" className={styles.appBar}>
@@ -48,27 +75,33 @@ const NavBar: React.FC = () => {
             justifyContent={isMobile ? "flex-start" : "center"}
             style={{ transform: `scale(${scale})`, transformOrigin: 'left' }}
           >          
-            <img src="/shopIcon.png" alt="Logo" className={styles.logo} />
-            <Typography variant="h6">  
-              <span className={styles.colorOnline}>Online</span>
-              <span className={styles.colorShop}>Shop</span>
-            </Typography>
+           <Link href={'/'}>
+              <img src="/Logo.png" alt="Logo" className={styles.logo} />
+           </Link>
+           
           </Box>
           <div className={styles.iconContainer} style={{ transform: `scale(${scale})`, transformOrigin: 'left' }}>
             <Link href={'/cart'}>
               <span className={styles.iconLinkCheckout}>
                 <Badge badgeContent={orderCount} color="warning">  
-                  <IconifyIcon color="#000" icon="streamline:shopping-cart-3-shopping-cart-checkout" />
+                  <IconifyIcon color={ orderCount>0 ? "var(--primary-color)" : 'var(--nav-icon)'} icon="streamline:shopping-cart-3-shopping-cart-checkout" />
                 </Badge>
               </span>
             </Link>
-            <Link href={'/auth/login'}> 
-              <span className={styles.iconLinkUser}>
-                <Badge>
-                  <IconifyIcon color="#000" icon="ep:user"/> 
-                </Badge>
-              </span>
-            </Link>
+            <span className={styles.iconLinkUser} onClick={handleMenuOpen}>
+              <Badge>
+                <IconifyIcon color={userActive ? "var(--primary-color)" : "var(--nav-icon)"} icon="ep:user"/>
+              </Badge>
+            </span>
+            <Menu
+              anchorEl={anchorEl}
+              keepMounted
+              open={Boolean(anchorEl)}
+              onClose={handleMenuClose}
+            >
+              <MenuItem onClick={handleLogout}>Log out</MenuItem>
+              {/* You can add more menu items here if needed */}
+            </Menu>
           </div>
         </Toolbar> 
       </AppBar> 

@@ -5,14 +5,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { frmPrice } from '@/common/formatted/Price';
 import { getUser, setUser ,IUser} from '@/redux/slices/userSlice'; 
 import { addProductToCart } from '@/redux/slices/orderSlice'; 
-
+import CButton from '@components/button/Button' 
 import { Card, CardContent, CardMedia, Typography } from '@mui/material';
 import Link from 'next/link';
 import IconifyIcon from '@components/icon';
 import { Product } from '@/common/types/Product'
+import { useRouter } from 'next/navigation'
+
+import { getProductById } from '@/api/product.service';  
+import { Response } from '@/common/types/Response' 
  
  
-export default function ProductList() {  
+export default function ProductList(props:any) {  
+  const { searchParams } = props;
+  const { product_id } = searchParams;
+  const router = useRouter(); 
   const dispatch = useDispatch();
   const [quantity, setQuantity] = useState<number>(1);
   const user:IUser = useSelector(getUser); 
@@ -24,11 +31,25 @@ export default function ProductList() {
 
   
   useEffect(() => {
-    (async ()=>{ 
+    (async () => {
       const productData = localStorage.getItem('product'); 
-      const product: Product = productData ? JSON.parse(productData) : {} as Product;
-      setProductInfo(product)  
-    })()
+      if (!productData) { 
+
+        if (!product_id) {
+          router.push('/');
+          return; 
+        }
+
+        const result: Response = await getProductById(product_id);
+        if (result.status === 200) { 
+          setProductInfo(result.data);
+        }
+      } else { 
+        const product: Product = JSON.parse(productData);
+        setProductInfo(product); 
+        localStorage.removeItem('product');
+      }
+    })();
   }, []);
  
   const handleIncrement = () => {
@@ -53,7 +74,7 @@ export default function ProductList() {
       dispatch(
         addProductToCart({
           ...p,
-          addItem: quantity
+          quantity: quantity
         })
       ); 
     }
@@ -105,7 +126,7 @@ export default function ProductList() {
               </div>
             </div>
             <div className={styles.addCart}>
-              <button  className={styles.btnAddCart} onClick={addToCart}>Add to cart</button>
+              <CButton name={'Add to cart'} onClick={addToCart}/> 
             </div>
           </div>
 

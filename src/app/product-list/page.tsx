@@ -2,21 +2,29 @@
 import { useState, useEffect } from 'react';
 import CardProduct from '@components/card-product/CardProduct';
 import styles from './page.module.css';
-import { getProducts } from '@/api/product.service'; // Update this path
 import { useDispatch, useSelector } from 'react-redux';
 import { getUser, setUser ,IUser} from '@/redux/slices/userSlice';
 import { FormControl, Select, MenuItem } from '@mui/material';
 import { Product } from '@/common/types/Product'
- 
+import { getProducts } from '@/api/product.service';  
+import { Response } from '@/common/types/Response' 
+
+
 export default function ProductList() {
   const [products, setProducts] = useState<Product[]>([]); 
   const [sortOrder, setSortOrder] = useState<'HIGH_TO_LOW' | 'LOW_TO_HIGH' | null>(null); 
   const user:IUser = useSelector(getUser); 
-  
+
+  useEffect(() => { 
+    if (user && user.token) {
+      localStorage.setItem('userToken', user.token);
+    }
+  }, [user]);
+
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const result = await getProducts(1, 20,String(user.token)); 
+        const result:Response = await getProducts(1, 20); 
         setProducts(result.data);
       } catch (error) {
         console.error("Failed to fetch products:", error);

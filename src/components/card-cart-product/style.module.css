@@ -1,0 +1,136 @@
+.card {
+  display: flex;
+  justify-content: space-between;
+  justify-content: center;
+  border: 0.5px solid #e0e0e0;
+  padding: 10px;
+  margin: 10px 0;
+  width: 100%;
+  min-height: 8vh;
+}
+
+.imgCol {
+  flex: 1;
+  /* width: 30%;  */
+}
+
+.productImage { 
+  width: 100%;
+  max-width: 100%;
+  max-height: 10vh;
+  object-fit: cover;
+}
+
+.detailCol {
+  flex: 3;
+  display: flex;
+  padding-left: 1rem;
+  padding-right: 1rem;
+  flex-direction: column;
+  justify-content:flex-start;
+  align-items: flex-start; 
+  min-height: 100%; 
+}
+.priceCol {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content:flex-start;
+  align-items: center; 
+}
+
+.title{
+  display: flex;
+  flex-direction: row; 
+  margin-bottom: 1rem;
+}
+.titlePrice{
+  display: flex; 
+  flex-direction: row; 
+  margin-bottom: 1rem;
+}
+
+.qty {
+  display: flex;
+  flex-direction: row; 
+}
+
+.qty_title {
+  flex-direction: column; 
+}
+
+.qty_body {
+  display: flex;
+  flex-direction: row; 
+  width: 100%; 
+  padding-left: 1rem; 
+}
+
+.minus {
+  width: 20%;
+  background-color: var(--primary-color);
+  max-height: 100%;
+  border: none; /* Remove the default border */
+  border-radius: 5px; 
+}
+
+.count { 
+  width: 50%;
+  padding: 2px;
+  border-radius: 8px;
+  border: 1px solid var(--primary-color);  
+  background-color: whitesmoke;
+  color: black;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  margin-left: 2px;
+  margin-right: 2px;
+}
+
+.plus {
+  width: 20%;
+  background-color: var(--primary-color);
+  max-height: 100%;
+  border: none; /* Remove the default border */
+  border-radius: 5px; 
+}
+
+
+.deleteIcon {
+  cursor: pointer;
+}
+
+
+@media (min-width: 768px) {
+  .card {
+    display: flex;
+    justify-content: space-between;
+    justify-content: center;
+    border: 0.5px solid #e0e0e0;
+    padding: 10px;
+    margin: 10px 0;
+    width: 100%;
+    min-height: 14rem;
+  }
+
+  .productImage { 
+    width: 100%;
+    max-width: 100%;
+    max-height: 15rem;
+    object-fit: cover;
+  }
+
+  .title{
+    display: flex;
+    flex-direction: row; 
+    margin-bottom: 2rem;
+    font-size: 28px;
+  }
+  .titlePrice{
+    display: flex; 
+    flex-direction: row; 
+    margin-bottom: 2rem;
+    font-size: 28px;
+  }
+}
