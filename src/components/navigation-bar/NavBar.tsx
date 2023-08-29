@@ -12,13 +12,14 @@ import {  AppBar, Toolbar, Typography, Badge, IconButton, Modal, Box, Card, Cont
  
 
 const NavBar: React.FC = () => { 
+  const user:IUser = useSelector(getUser); 
   const [orderCount, setOrderCount] = useState<number>(0);
   const [isMobile, setIsMobile] = useState<boolean>(false);
   const [scale, setScale] = useState<number>(1);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [userActive, setUserActive] = useState<boolean>(true);
   const order:IPropsOrder = useSelector(getOrder); 
-  const user:IUser = useSelector(getUser); 
+  
 
   useEffect(() => { 
     if (user && user.token) {
@@ -58,9 +59,8 @@ const NavBar: React.FC = () => {
     setAnchorEl(null);
   };
 
-  const handleLogout = () => { 
-    localStorage.removeItem('userToken'); 
-    // handleMenuClose();
+  const handleLogout = () => {  
+    localStorage.removeItem('userToken');  
   };
 
   const LinkCart = useMemo(()=>{
@@ -78,6 +78,17 @@ const NavBar: React.FC = () => {
             </Badge>
           </span>
   },[orderCount])
+  const LinkStock = useMemo(()=>{
+    return (user?.role == 'admin' || user?.role == 'dev') ?
+          <Link href={'/product-stock'}>
+            <span className={styles.iconLinkStock}>
+              <Badge>
+                <IconifyIcon color={"var(--primary-color)"} icon="nimbus:store"/>
+              </Badge>
+            </span>
+          </Link>: <span className={styles.iconLinkStock}></span>
+  },[user])
+
   return (
     <>
       <AppBar position="static" className={styles.appBar}>
@@ -94,21 +105,26 @@ const NavBar: React.FC = () => {
            
           </Box>
           <div className={styles.iconContainer} style={{ transform: `scale(${scale})`, transformOrigin: 'left' }}>
-            {LinkCart}
-            <span className={styles.iconLinkUser} onClick={handleMenuOpen}>
-              <Badge>
-                <IconifyIcon color={userActive ? "var(--primary-color)" : "var(--nav-icon)"} icon="ep:user"/>
-              </Badge>
-            </span>
-            <Menu
-              anchorEl={anchorEl}
-              keepMounted
-              open={Boolean(anchorEl)}
-              onClose={handleMenuClose}
-            >
-              <MenuItem onClick={handleLogout}>Log out</MenuItem>
-              {/* You can add more menu items here if needed */}
-            </Menu>
+            {/* {userActive ? null : */}
+            <> 
+              {LinkStock}
+              {LinkCart}
+
+              <span className={styles.iconLinkUser} onClick={handleMenuOpen}>
+                <Badge>
+                  <IconifyIcon color={userActive ? "var(--primary-color)" : "var(--nav-icon)"} icon="ep:user"/>
+                </Badge>
+              </span>
+              <Menu
+                anchorEl={anchorEl}
+                keepMounted
+                open={Boolean(anchorEl)}
+                onClose={handleMenuClose}
+              >
+                <MenuItem onClick={handleLogout}><Link href={'/auth/login'}>Log out</Link></MenuItem> 
+              </Menu>
+            </>
+            {/* } */}
           </div>
         </Toolbar> 
       </AppBar> 

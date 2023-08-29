@@ -8,6 +8,7 @@ import { FormControl, Select, MenuItem } from '@mui/material';
 import { Product } from '@/common/types/Product'
 import { getProducts } from '@/api/product.service';  
 import { Response } from '@/common/types/Response' 
+import WithAuth  from '@/app/withAuth'; 
 
 
 export default function ProductList() {
@@ -24,7 +25,7 @@ export default function ProductList() {
   useEffect(() => {
     async function fetchProducts() {
       try {
-        const result:Response = await getProducts(1, 20); 
+        const result:Response = await getProducts(1, 40); 
         setProducts(result.data);
       } catch (error) {
         console.error("Failed to fetch products:", error);
@@ -46,30 +47,32 @@ export default function ProductList() {
 
   return (
     <>
-      <div className={styles.sortContainer}>
-        {!products?.length ? null : 
-        <select 
-          style={{padding:'0.5rem'}}
-          value={sortOrder || ''}
-          onChange={(e) => setSortOrder(e.target.value as 'HIGH_TO_LOW' | 'LOW_TO_HIGH')}
-          className={styles.sortDropdown} 
-        >
-          <option value=""><span>Sort by Price</span></option>
-          <option value="HIGH_TO_LOW">High to Low</option>
-          <option value="LOW_TO_HIGH">Low to High</option>
-        </select>}
-      </div>
-      <div className={styles.productListContainer}>
-        {products?.length ? 
-          products.map((product:Product, index:number) => (
-            <CardProduct
-              key={index}
-              product={product}
-            />
-          )) :
-          <div>Loading...</div>
-        }
-      </div>
+      <WithAuth>
+        <div className={styles.sortContainer}>
+          {!products?.length ? null : 
+          <select 
+            style={{padding:'0.5rem'}}
+            value={sortOrder || ''}
+            onChange={(e) => setSortOrder(e.target.value as 'HIGH_TO_LOW' | 'LOW_TO_HIGH')}
+            className={styles.sortDropdown} 
+          >
+            <option value=""><span>Sort by Price</span></option>
+            <option value="HIGH_TO_LOW">High to Low</option>
+            <option value="LOW_TO_HIGH">Low to High</option>
+          </select>}
+        </div>
+        <div className={styles.productListContainer}>
+          {products?.length ? 
+            products.map((product:Product, index:number) => (
+              <CardProduct
+                key={index}
+                product={product}
+              />
+            )) :
+            <div>Loading...</div>
+          }
+        </div>
+      </WithAuth>
     </>
   );
 }

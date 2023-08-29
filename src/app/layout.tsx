@@ -1,14 +1,11 @@
 import '@styles/globals.css'
 import type { Metadata } from 'next'
+import React, { useState, useEffect } from 'react';
 import { Content, Inter } from 'next/font/google' 
 import styles from './page.module.css'
 import Providers from '@/redux/store/Provider';
-import NavBar from '@components/navigation-bar/NavBar'
-import Link from 'next/link'  
-import Head from 'next/head';
-
+import NavBar from '@components/navigation-bar/NavBar' 
 import { Container, Typography, Link as MuiLink } from '@mui/material';
-
 const inter = Inter({ subsets: ['latin'] })
 
 type RootLayoutProps = {
@@ -22,12 +19,12 @@ export const metadata: Metadata = {
 }
 
 const RootLayout: React.FC<RootLayoutProps> = ({ children }) => {
-  
+ 
   return (
     <html lang="en">  
       <body className={inter.className}>  
         <Providers> 
-          <NavBar /> 
+          <NavBar />  
           <div>
             {children}
           </div> 

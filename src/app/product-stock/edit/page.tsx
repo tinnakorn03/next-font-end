@@ -14,10 +14,11 @@ import { useRouter } from 'next/navigation'
 import ProductForm from '@components/product-form/ProductForm'
 import { getProductById, createProduct, updateProduct } from '@/api/product.service';  
 import { Response } from '@/common/types/Response' 
+import WithAuth  from '@/app/withAuth'; 
+
  
  
- 
-export default function CreateProduct(props:any) {
+export default function EditProduct(props:any) {
   const { searchParams } = props;
   const { product_id } = searchParams;
   const router = useRouter(); 
@@ -76,19 +77,20 @@ export default function CreateProduct(props:any) {
   };
 
   return (
-    <> 
-      <main className={styles.main}>
-        
-        {!loading ? (
-            <ProductForm
-              initialValues={isEditMode ? p : obj}
-              onSubmit={handleSubmit}
-              actionType={isEditMode ? "edit" : "create"}
-            />
-          ) : (
-            <div>Loading...</div>
-          )} 
-      </main>
+    <>  
+      <main className={styles.main}> 
+        <WithAuth>
+          {!loading ? (
+              <ProductForm
+                initialValues={isEditMode ? p : obj}
+                onSubmit={handleSubmit}
+                actionType={isEditMode ? "edit" : "create"}
+              />
+            ) : (
+              <div>Loading...</div>
+            )} 
+        </WithAuth>
+      </main> 
     </>
   )
 }

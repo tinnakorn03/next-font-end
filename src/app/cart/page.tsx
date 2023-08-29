@@ -12,6 +12,7 @@ import { Product } from '@/common/types/Product'
 import CardCartProduct from '@components/card-cart-product/CardCartProduct';
 import CButton from '@components/button/Button'
 import { Response } from '@/common/types/Response' 
+import WithAuth  from '@/app/withAuth'; 
 
 // API 
 import { createOrder } from '@/api/order.service';  
@@ -72,7 +73,6 @@ export default function Cart() {
         if(result.status === 200){
           const {message, transactionNo}:{message:string, transactionNo:string} = result?.data;
           localStorage.setItem('transactionNo', JSON.stringify(transactionNo));
-          dispatch(resetCart())
           router.push('/check-out-success') 
         }else{
           const {message}:{message:string} = result?.data;
@@ -85,43 +85,45 @@ export default function Cart() {
   return (
     <>
       <main className={styles.main}>  
-        <article className={styles.container}>
-          <div className={styles.itemList}>
-            <div className={styles.title}>
-              <h1>Cart</h1>
-            </div>
-            {order?.orders?.length ? 
-              order?.orders.map((product:Product, index:number) => (
-                <CardCartProduct key={index} product={product} onUpdate={updateOrderData} onRemove={removeOrderData}/>
-              )) :
-              <div className={styles.boxdiv}>
-                <img src="/empty-box.png" alt="EmptyBox" className={styles.emptybox} />
+        <WithAuth>
+          <article className={styles.container}>
+            <div className={styles.itemList}>
+              <div className={styles.title}>
+                <h1>Cart</h1>
               </div>
-            } 
-          </div> 
-          <div className={styles.summary}>
-            <div className={styles.title}>
-              <h1>Summary</h1>
-            </div>
-            <div className={styles.detail}>
-              <div className={styles.detail_item}>
-                <h4>Subtotal</h4>
-                <h4>{frmPrice((order?.total_price || 0),true)}</h4>
+              {order?.orders?.length ? 
+                order?.orders.map((product:Product, index:number) => (
+                  <CardCartProduct key={index} product={product} onUpdate={updateOrderData} onRemove={removeOrderData}/>
+                )) :
+                <div className={styles.boxdiv}>
+                  <img src="/empty-box.png" alt="EmptyBox" className={styles.emptybox} />
+                </div>
+              } 
+            </div> 
+            <div className={styles.summary}>
+              <div className={styles.title}>
+                <h1>Summary</h1>
               </div>
-              <div className={styles.detail_item}>
-                <h4>Estimated Deliverry</h4>
-                <h4>{frmPrice((order?.deliverry_price|| 0),true)}</h4>
+              <div className={styles.detail}>
+                <div className={styles.detail_item}>
+                  <h4>Subtotal</h4>
+                  <h4>{frmPrice((order?.total_price || 0),true)}</h4>
+                </div>
+                <div className={styles.detail_item}>
+                  <h4>Estimated Deliverry</h4>
+                  <h4>{frmPrice((order?.deliverry_price|| 0),true)}</h4>
+                </div>
               </div>
-            </div>
-            <div className={styles.total}>
-                <h2>Total</h2>
-                <h2>{frmPrice(((order?.total_price || 0) + (200|| 0)),true)}</h2>
-            </div>
-            <div className={styles.checkout}>
-              <CButton name={'Checkout'} onClick={checkOut}/>
-            </div>
-          </div> 
-        </article>
+              <div className={styles.total}>
+                  <h2>Total</h2>
+                  <h2>{frmPrice(((order?.total_price || 0) + (200|| 0)),true)}</h2>
+              </div>
+              <div className={styles.checkout}>
+                <CButton name={'Checkout'} onClick={checkOut}/>
+              </div>
+            </div> 
+          </article>
+        </WithAuth>
       </main>
     </>
 );

@@ -11,6 +11,7 @@ import Link from 'next/link';
 import IconifyIcon from '@components/icon';
 import { Product } from '@/common/types/Product'
 import { useRouter } from 'next/navigation'
+import WithAuth  from '@/app/withAuth'; 
 
 import { getProductById } from '@/api/product.service';  
 import { Response } from '@/common/types/Response' 
@@ -84,55 +85,57 @@ export default function ProductList(props:any) {
   return (
     <>
       <main className={styles.main}> 
-        <article className={styles.breadcrumb}> 
-          <span><Link href="/" className={styles.Home}> Home </Link> {'>'} {p?.product_name}</span> 
-        </article> 
-        <article className={styles.container}>
-          <div className={styles.cardImg}>
-            <img 
-              className={styles.image} 
-              src={p?.image} 
-              alt={p?.product_name} 
-              title={p?.product_name}
-            />
-          </div> 
-          <div className={styles.cardContent}>
-            <div className={styles.title}>
-              <h1>{p?.product_name}</h1>
-            </div>
-            <div className={styles.price}>
-              <span>{formattedPrice}</span>
-            </div>
-            <div className={styles.description}>
-              <div className={styles.descriptionClamp}>
-                <h4>{p?.description}</h4>
+        <WithAuth>
+          <article className={styles.breadcrumb}> 
+            <span><Link href="/" className={styles.Home}> Home </Link> {'>'} {p?.product_name}</span> 
+          </article> 
+          <article className={styles.container}>
+            <div className={styles.cardImg}>
+              <img 
+                className={styles.image} 
+                src={p?.image} 
+                alt={p?.product_name} 
+                title={p?.product_name}
+              />
+            </div> 
+            <div className={styles.cardContent}>
+              <div className={styles.title}>
+                <h1>{p?.product_name}</h1>
+              </div>
+              <div className={styles.price}>
+                <span>{formattedPrice}</span>
+              </div>
+              <div className={styles.description}>
+                <div className={styles.descriptionClamp}>
+                  <h4>{p?.description}</h4>
+                </div>
+              </div>
+              <div className={styles.qty}>
+                <span className={styles.qty_title}>Quantity</span>
+                <div className={styles.qty_body}>
+                  <button className={styles.minus} onClick={handleDecrement}>
+                    <IconifyIcon color="#fff" icon="heroicons:minus-20-solid"/> 
+                  </button>
+                  <input  
+                    className={styles.count}
+                    // type="number" 
+                    value={quantity} 
+                    onChange={handleInputChange} 
+                    min="0" 
+                    max="999"
+                  />
+                  <button className={styles.plus } onClick={handleIncrement}>
+                    <IconifyIcon color="#fff" icon="icon-park:plus"/> 
+                  </button>
+                </div>
+              </div>
+              <div className={styles.addCart}>
+                <CButton name={'Add to cart'} style={{color:'#fff'}} onClick={addToCart}/> 
               </div>
             </div>
-            <div className={styles.qty}>
-              <span className={styles.qty_title}>Quantity</span>
-              <div className={styles.qty_body}>
-                <button className={styles.minus} onClick={handleDecrement}>
-                  <IconifyIcon color="#fff" icon="heroicons:minus-20-solid"/> 
-                </button>
-                <input  
-                  className={styles.count}
-                  // type="number" 
-                  value={quantity} 
-                  onChange={handleInputChange} 
-                  min="0" 
-                  max="999"
-                />
-                <button className={styles.plus } onClick={handleIncrement}>
-                  <IconifyIcon color="#fff" icon="icon-park:plus"/> 
-                </button>
-              </div>
-            </div>
-            <div className={styles.addCart}>
-              <CButton name={'Add to cart'} style={{color:'#fff'}} onClick={addToCart}/> 
-            </div>
-          </div>
 
-        </article>
+          </article>
+        </WithAuth>
       </main>
     </>
 );

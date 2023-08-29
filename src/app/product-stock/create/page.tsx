@@ -14,7 +14,7 @@ import { useRouter } from 'next/navigation'
 import ProductForm from '@components/product-form/ProductForm'
 import { getProductById, createProduct, updateProduct } from '@/api/product.service';  
 import { Response } from '@/common/types/Response' 
- 
+import WithAuth  from '@/app/withAuth'; 
  
  
 export default function CreateProduct() { 
@@ -40,11 +40,13 @@ export default function CreateProduct() {
   return (
     <> 
       <main className={styles.main}> 
-        <ProductForm
-          initialValues={p}
-          onSubmit={handleSubmit}
-          actionType={"create"}
-        /> 
+        <WithAuth>
+          <ProductForm
+            initialValues={p}
+            onSubmit={handleSubmit}
+            actionType={"create"}
+          /> 
+        </WithAuth>
       </main>
     </>
   )

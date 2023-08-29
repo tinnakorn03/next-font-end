@@ -26,10 +26,16 @@ export default function SignUp() {
 });
   const handleSubmit = async (formData: User) => { 
     const result: Response = await signUp(formData);
-    if (result.status === 200) {  
-      router.push('/auth/login')  
-    }else{
-      alert('Sign Up: '+result.message)
+    
+    switch(result.status){
+      case 200 :
+        router.push('/auth/login')  
+      break;
+      case 202 :
+        alert('Sign Up: '+ result.data.message)
+      break;
+      default :
+        alert('Sign Up: '+result.message)
     } 
   };
 
